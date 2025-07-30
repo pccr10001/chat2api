@@ -54,7 +54,7 @@ async def verify_token(req_token):
         if req_token.startswith("eyJhbGciOi") or req_token.startswith("fk-"):
             access_token = req_token
             return access_token
-        elif len(req_token) == 45:
+        elif len(req_token) == 45 or len(req_token) == 90 or req_token.startswith("rt_"):
             try:
                 if req_token in globals.error_token_list:
                     raise HTTPException(status_code=401, detail="Error RefreshToken")

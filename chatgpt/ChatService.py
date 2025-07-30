@@ -143,34 +143,28 @@ class ChatService:
         else:
             self.gizmo_id = None
 
-        if "o3-mini-high" in self.origin_model:
-            self.req_model = "o3-mini-high"
-        elif "o3-mini-medium" in self.origin_model:
-            self.req_model = "o3-mini-medium"
-        elif "o3-mini-low" in self.origin_model:
-            self.req_model = "o3-mini-low"
-        elif "o3-mini" in self.origin_model:
+        if "o3-mini" in self.origin_model:
             self.req_model = "o3-mini"
+        elif "o4-mini" in self.origin_model:
+            self.req_model = "o4-mini"
         elif "o3" in self.origin_model:
             self.req_model = "o3"
-        elif "o1-preview" in self.origin_model:
-            self.req_model = "o1-preview"
         elif "o1-pro" in self.origin_model:
             self.req_model = "o1-pro"
         elif "o1-mini" in self.origin_model:
             self.req_model = "o1-mini"
         elif "o1" in self.origin_model:
             self.req_model = "o1"
-        elif "gpt-4.5o" in self.origin_model:
-            self.req_model = "gpt-4.5o"
-        elif "gpt-4o-canmore" in self.origin_model:
-            self.req_model = "gpt-4o-canmore"
         elif "gpt-4o-mini" in self.origin_model:
             self.req_model = "gpt-4o-mini"
         elif "gpt-4o" in self.origin_model:
             self.req_model = "gpt-4o"
-        elif "gpt-4-mobile" in self.origin_model:
-            self.req_model = "gpt-4-mobile"
+        elif "gpt-4.1" in self.origin_model:
+            self.req_model = "gpt-4.1"
+        elif "gpt-4.1-mini" in self.origin_model:
+            self.req_model = "gpt-4.1-mini"
+        elif "gpt-4.1-nano" in self.origin_model:
+            self.req_model = "gpt-4.1-nano"
         elif "gpt-4" in self.origin_model:
             self.req_model = "gpt-4"
         elif "gpt-3.5" in self.origin_model:
