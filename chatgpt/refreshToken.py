@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import random
 import time
 
@@ -29,25 +30,47 @@ async def rt2ac(refresh_token, force_refresh=False):
 
 
 async def chat_refresh(refresh_token):
-    data = {
-        "client_id": "pdlLIX2Y72MIl2rhLhTE9VV9bN905kBh",
-        "grant_type": "refresh_token",
-        "redirect_uri": "com.openai.chat://auth0.openai.com/ios/com.openai.chat/callback",
-        "refresh_token": refresh_token
-    }
-    headers = {
-        'accept': '*/*',
-        'accept-encoding': 'gzip, deflate, br, zstd',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'origin': 'https://auth0.openai.com',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0'
-    }
+    is_android = os.getenv("ANDROID", "false").lower() == "true"
+    
+    if is_android:
+        data = {
+            "client_id": "app_xwBKzt04752TTSfXnki17hmB",
+            "grant_type": "refresh_token",
+            "redirect_uri": "com.openai.chatgpt://auth.openai.com/android/com.openai.chatgpt/callback",
+            "refresh_token": refresh_token
+        }
+        headers = {
+            'accept': '*/*',
+            'accept-encoding': 'gzip',
+            'accept-language': 'zh_TW_#Hant',
+            'content-type': 'application/json; charset=utf-8',
+            'host': 'auth.openai.com',
+            'user-agent': 'ChatGPT/1.2025.203 (Android 16; Pixel 8; build 2520309)',
+            'connection': 'keep-alive'
+        }
+        url = "https://auth.openai.com/api/accounts/oauth/token"
+    else:
+        data = {
+            "client_id": "pdlLIX2Y72MIl2rhLhTE9VV9bN905kBh",
+            "grant_type": "refresh_token",
+            "redirect_uri": "com.openai.chat://auth0.openai.com/ios/com.openai.chat/callback",
+            "refresh_token": refresh_token
+        }
+        headers = {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br, zstd',
+            'accept-language': 'en-US,en;q=0.9',
+            'content-type': 'application/json',
+            'origin': 'https://auth0.openai.com',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0'
+        }
+        url = "https://auth0.openai.com/oauth/token"
+    
     session_id = hashlib.md5(refresh_token.encode()).hexdigest()
     proxy_url = random.choice(proxy_url_list).replace("{}", session_id) if proxy_url_list else None
     client = Client(proxy=proxy_url)
     try:
-        r = await client.post("https://auth0.openai.com/oauth/token", json=data, headers=headers, timeout=15)
+        r = await client.post(url, json=data, headers=headers, timeout=15)
         if r.status_code == 200:
             access_token = r.json()['access_token']
             return access_token
